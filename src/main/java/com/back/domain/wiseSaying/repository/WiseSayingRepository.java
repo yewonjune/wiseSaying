@@ -4,6 +4,7 @@ import com.back.domain.wiseSaying.entity.WiseSaying;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 명언 데이터의 생성·조회·수정·삭제만 담당한다. 이 단계의 저장소는 메모리 리스트다.
@@ -24,6 +25,19 @@ public class WiseSayingRepository {
      */
     public List<WiseSaying> findAll() {
         return List.copyOf(wiseSayings);
+    }
+
+    public Optional<WiseSaying> findById(int id) {
+        return wiseSayings.stream()
+                .filter(wiseSaying -> wiseSaying.getId() == id)
+                .findFirst();
+    }
+
+    /**
+     * 메모리 저장소에서는 엔티티가 이미 바뀌어 있으므로 할 일이 없다.
+     * 파일·DB 저장소로 바꾸면 여기서 변경 내용을 기록한다.
+     */
+    public void update(WiseSaying wiseSaying) {
     }
 
     /**
