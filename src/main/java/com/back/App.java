@@ -1,6 +1,9 @@
 package com.back;
 
 import com.back.domain.system.controller.SystemController;
+import com.back.domain.wiseSaying.controller.WiseSayingController;
+import com.back.domain.wiseSaying.repository.WiseSayingRepository;
+import com.back.domain.wiseSaying.service.WiseSayingService;
 
 import java.nio.file.Path;
 import java.util.Scanner;
@@ -9,11 +12,18 @@ public class App {
     private final Scanner scanner;
     private final Path dataJsonPath;
     private final SystemController systemController;
+    private final WiseSayingController wiseSayingController;
 
     public App(Scanner scanner, Path dataJsonPath) {
         this.scanner = scanner;
         this.dataJsonPath = dataJsonPath;
+
+        // 스프링이 해 줄 생성자 주입을 직접 한다: Repository → Service → Controller
+        WiseSayingRepository wiseSayingRepository = new WiseSayingRepository();
+        WiseSayingService wiseSayingService = new WiseSayingService(wiseSayingRepository);
+
         this.systemController = new SystemController();
+        this.wiseSayingController = new WiseSayingController(scanner, wiseSayingService);
     }
 
     public void run() {
@@ -31,6 +41,9 @@ public class App {
                     systemController.actionExit();
                     return;
                 }
+                case "등록" -> wiseSayingController.actionWrite();
+                case "목록" -> wiseSayingController.actionList();
+                case "삭제" -> wiseSayingController.actionDelete(rq);
                 default -> System.out.println("알 수 없는 명령입니다.");
             }
         }
