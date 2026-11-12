@@ -78,11 +78,11 @@ data.json 파일의 내용이 갱신되었습니다.
 
 ## Implementation Decisions
 
-- **빌드 환경**: Gradle(Kotlin DSL), Java 25(Temurin), IntelliJ IDEA. 외부 런타임 의존성 없음. 테스트 의존성은 JUnit 5, AssertJ.
+- **빌드 환경**: Gradle(Kotlin DSL), Java 25(Temurin), IntelliJ IDEA. 외부 런타임 의존성 없음. 테스트 의존성은 JUnit 6(junit-bom 6.0.3), AssertJ. 실행은 Gradle `application` 플러그인의 `run` 태스크로 한다. Main은 콘솔의 `stdin.encoding` 문자셋으로 표준 입력을 읽어 Windows 터미널(MS949)에서도 한글 입력이 깨지지 않게 한다.
 - **패키지·클래스 구조** (과제의 추천 구조 그대로):
   - `com.back.Main`: App 생성·실행만.
   - `com.back.App`: 메인 루프. `명령) `을 출력하고 한 줄을 읽어 Rq를 만든 뒤 명령 이름에 따라 컨트롤러로 위임. 입출력 가능.
-  - `com.back.Rq`: 명령 문자열 파싱. `getActionName()`(`?` 앞부분), `getParamAsInt(name, defaultValue)`(값이 없거나 숫자가 아니면 기본값). 파라미터는 `&`로 여러 개 구분 가능하게.
+  - `com.back.Rq`: 명령 문자열 파싱. `getActionName()`(`?` 앞부분), `getParamAsInt(name, defaultValue)`(값이 없거나 숫자가 아니면 기본값), `findParamAsInt(name)`(같은 조건에서 빈 `OptionalInt`; 매직 기본값 없이 `-1` 같은 음수 id도 숫자로 다룬다). 파라미터는 `&`로 여러 개 구분 가능하게.
   - `com.back.domain.system.controller.SystemController`: `종료` 처리. 입출력 가능.
   - `com.back.domain.wiseSaying.controller.WiseSayingController`: 등록·목록·삭제·수정·빌드 응대. 입출력 가능.
   - `com.back.domain.wiseSaying.service.WiseSayingService`: 순수 비즈니스 로직. 입출력 금지. 빌드 시 JSON 문자열 생성과 파일 쓰기 담당(파일 쓰기는 콘솔 입출력이 아니므로 허용).
@@ -106,7 +106,7 @@ data.json 파일의 내용이 갱신되었습니다.
 - 핵심 테스트: 과제 예시 시나리오 전체를 입력하고 출력이 예시와 일치하는지 확인.
 - 추가 시나리오: 번호 비재사용, 빈 목록, 없는 번호 수정, id 누락·비숫자, 알 수 없는 명령, 빈 상태 빌드(`[]`), 특수문자 이스케이프, 빌드 덮어쓰기.
 - 기존 테스트 선례는 없음(빈 저장소). 이 테스트가 이후 단계의 기준이 된다.
-- 도구: JUnit 5, AssertJ.
+- 도구: JUnit 6, AssertJ.
 
 ## Out of Scope
 

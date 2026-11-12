@@ -2,6 +2,7 @@ package com.back;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.OptionalInt;
 
 /**
  * 명령 한 줄(예: "삭제?id=1")을 명령 이름과 파라미터로 나눈다.
@@ -40,10 +41,17 @@ public class Rq {
     }
 
     public int getParamAsInt(String name, int defaultValue) {
+        return findParamAsInt(name).orElse(defaultValue);
+    }
+
+    /**
+     * @return 파라미터가 있고 정수이면 그 값, 없거나 정수가 아니면 빈 값
+     */
+    public OptionalInt findParamAsInt(String name) {
         try {
-            return Integer.parseInt(getParam(name, ""));
+            return OptionalInt.of(Integer.parseInt(getParam(name, "")));
         } catch (NumberFormatException e) {
-            return defaultValue;
+            return OptionalInt.empty();
         }
     }
 }

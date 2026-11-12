@@ -44,6 +44,8 @@ public class WiseSayingRepository {
      * @return 삭제했으면 true, 해당 번호가 없으면 false
      */
     public boolean deleteById(int id) {
-        return wiseSayings.removeIf(wiseSaying -> wiseSaying.getId() == id);
+        return findById(id)
+                .map(wiseSayings::remove)
+                .orElse(false);
     }
 }

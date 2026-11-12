@@ -27,7 +27,9 @@ public class App {
     public void run() {
         System.out.println("== 명언 앱 ==");
 
-        while (true) {
+        boolean running = true;
+
+        while (running) {
             System.out.print("명령) ");
 
             if (!scanner.hasNextLine()) break;
@@ -35,15 +37,12 @@ public class App {
             Rq rq = new Rq(scanner.nextLine());
 
             switch (rq.getActionName()) {
-                case "종료" -> {
-                    systemController.actionExit();
-                    return;
-                }
+                case "종료" -> running = systemController.actionExit();
                 case "등록" -> wiseSayingController.actionWrite();
                 case "목록" -> wiseSayingController.actionList();
                 case "삭제" -> wiseSayingController.actionDelete(rq);
                 case "수정" -> wiseSayingController.actionModify(rq);
-                case "빌드" ->wiseSayingController.actionBuild();
+                case "빌드" -> wiseSayingController.actionBuild();
                 default -> System.out.println("알 수 없는 명령입니다.");
             }
         }

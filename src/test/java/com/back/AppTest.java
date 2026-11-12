@@ -177,6 +177,46 @@ class AppTest {
     }
 
     @Test
+    @DisplayName("음수 id도 숫자이므로 삭제·수정 시 존재하지 않는다고 알려준다")
+    void negativeIdNotFound() {
+        String output = run("""
+                삭제?id=-1
+                수정?id=-1
+                종료
+                """);
+
+        assertThat(output).isEqualTo("""
+                == 명언 앱 ==
+                명령) -1번 명언은 존재하지 않습니다.
+                명령) -1번 명언은 존재하지 않습니다.
+                명령)\s""");
+    }
+
+    @Test
+    @DisplayName("등록·수정 시 내용과 작가의 앞뒤 공백도 입력한 그대로 저장한다")
+    void contentAndAuthorStoredAsTyped() throws IOException {
+        run("""
+                등록
+                  현재를 사랑하라.\s
+                 작자미상\s
+                등록
+                과거에 집착하지 마라.
+                작자미상
+                수정?id=2
+                 현재와 자신을 사랑하라.
+                홍길동\s\s
+                빌드
+                종료
+                """);
+
+        assertThat(readDataJson())
+                .contains("\"content\": \"  현재를 사랑하라. \"")
+                .contains("\"author\": \" 작자미상 \"")
+                .contains("\"content\": \" 현재와 자신을 사랑하라.\"")
+                .contains("\"author\": \"홍길동  \"");
+    }
+
+    @Test
     @DisplayName("삭제된 번호는 다시 쓰지 않는다")
     void deletedIdIsNotReused() {
         String output = run("""

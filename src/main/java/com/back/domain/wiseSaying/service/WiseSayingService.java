@@ -32,7 +32,7 @@ public class WiseSayingService {
     /**
      * 최신 명언부터(번호 내림차순).
      */
-    public List<WiseSaying> findForList() {
+    public List<WiseSaying> findAllOrderByIdDesc() {
         return wiseSayingRepository.findAll().reversed();
     }
 
