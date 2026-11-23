@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * <p>순서 무관: 실행 순서를 매번 무작위로 섞어도(MethodOrderer.Random) 결과가 같아야 한다.
  */
 @TestMethodOrder(MethodOrderer.Random.class)
-class WiseSayingControllerIT {
+class WiseSayingControllerTest {
     @AfterEach
     void restoreSystemOut() {
         // 테스트가 중간에 실패해도 다음 테스트에 출력 캡처가 남지 않게 한다.
