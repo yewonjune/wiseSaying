@@ -37,4 +37,6 @@ tasks.named<JavaExec>("run") {
 
 tasks.test {
     useJUnitPlatform()
+    // 테스트가 System.out을 바꿔 끼우므로 병렬 실행하지 않는다.
+    systemProperty("junit.jupiter.execution.parallel.enabled", "false")
 }

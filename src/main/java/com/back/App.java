@@ -13,6 +13,10 @@ public class App {
     private final SystemController systemController;
     private final WiseSayingController wiseSayingController;
 
+    public App(Scanner scanner) {
+        this(scanner, Path.of("data.json"));
+    }
+
     public App(Scanner scanner, Path dataJsonPath) {
         this.scanner = scanner;
 
