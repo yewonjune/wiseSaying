@@ -1,15 +1,31 @@
 package com.back;
 
+import com.back.standard.util.TestUtil;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * 명령어별 "입력 → 출력" 통합 테스트.
- * AppTestRunner가 매번 새 App(새 저장소, 번호 0부터)을 만들므로 테스트끼리 상태를 공유하지 않는다.
+ *
+ * <p>저장소 초기화: AppTestRunner.run()은 호출할 때마다 new App(scanner)를 만들고, App 생성자가
+ * 새 WiseSayingRepository(빈 리스트, lastId = 0)를 만든다. 저장소에 static 상태가 없으므로
+ * 각 테스트는 항상 빈 저장소·1번부터 시작한다.
+ *
+ * <p>순서 무관: 실행 순서를 매번 무작위로 섞어도(MethodOrderer.Random) 결과가 같아야 한다.
  */
+@TestMethodOrder(MethodOrderer.Random.class)
 class WiseSayingControllerTest {
+    @AfterEach
+    void restoreSystemOut() {
+        // 테스트가 중간에 실패해도 다음 테스트에 출력 캡처가 남지 않게 한다.
+        TestUtil.clearSetOutToByteArray();
+    }
+
     @Test
     @DisplayName("종료")
     void t1() {

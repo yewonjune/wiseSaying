@@ -1,7 +1,9 @@
 package com.back;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.IOException;
@@ -11,6 +13,10 @@ import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * 출력 전체를 그대로 비교하는 시나리오 테스트. 매 테스트가 새 App(빈 저장소)과 새 임시 폴더를 쓴다.
+ */
+@TestMethodOrder(MethodOrderer.Random.class)
 class AppTest {
     @TempDir
     Path tempDir;
